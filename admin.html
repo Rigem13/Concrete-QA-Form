@@ -5,7 +5,7 @@
 <div id="login"><input id="email" type="email" placeholder="Admin email"><input id="pass" type="password" placeholder="Password"><button id="signin">Sign in</button><p id="msg"></p></div>
 <div id="dash"><button id="refresh">Refresh</button><button id="logout">Sign out</button><h3 id="count"></h3><div class="scroll"><table><thead><tr><th>Reference</th><th>Date</th><th>Project</th><th>Inspector</th><th>Element</th><th>Spacer</th><th>Status</th><th>Photo</th></tr></thead><tbody id="rows"></tbody></table></div></div>
 </main><script>
-const URL="https://YOUR_PROJECT_REF.supabase.co",KEY="YOUR_PUBLISHABLE_OR_ANON_KEY";
+const URL="https://uyhwjinqrnghdleyzmho.supabase.co",KEY="sb_publishable_gevNS-TkeP70bppF1QZ4Ig_5AXTgH_g";
 const db=window.supabase.createClient(URL,KEY);
 const $=id=>document.getElementById(id);
 $("signin").onclick=async()=>{const {error}=await db.auth.signInWithPassword({email:$("email").value,password:$("pass").value});if(error){$("msg").textContent=error.message;return;}show();};
