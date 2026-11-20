@@ -1,0 +1,16 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>QualityFirst Admin</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>body{font-family:Arial;background:#eef2f6;padding:20px;color:#173454}main{max-width:1100px;margin:auto;background:white;padding:22px;border-radius:12px}input,button{padding:10px;margin:5px;border:1px solid #ccd5df;border-radius:5px}button{background:#104b91;color:white}table{border-collapse:collapse;width:100%;font-size:13px}td,th{padding:9px;border-bottom:1px solid #ddd;text-align:left}th{background:#104b91;color:white}#dash{display:none}.scroll{overflow:auto}</style></head><body><main>
+<h1>QualityFirst Engineering</h1><h2>Inspection Admin Dashboard</h2>
+<div id="login"><input id="email" type="email" placeholder="Admin email"><input id="pass" type="password" placeholder="Password"><button id="signin">Sign in</button><p id="msg"></p></div>
+<div id="dash"><button id="refresh">Refresh</button><button id="logout">Sign out</button><h3 id="count"></h3><div class="scroll"><table><thead><tr><th>Reference</th><th>Date</th><th>Project</th><th>Inspector</th><th>Element</th><th>Spacer</th><th>Status</th><th>Photo</th></tr></thead><tbody id="rows"></tbody></table></div></div>
+</main><script>
+const URL="https://YOUR_PROJECT_REF.supabase.co",KEY="YOUR_PUBLISHABLE_OR_ANON_KEY";
+const db=window.supabase.createClient(URL,KEY);
+const $=id=>document.getElementById(id);
+$("signin").onclick=async()=>{const {error}=await db.auth.signInWithPassword({email:$("email").value,password:$("pass").value});if(error){$("msg").textContent=error.message;return;}show();};
+async function show(){const {data}=await db.auth.getSession();if(!data.session)return;$("login").style.display="none";$("dash").style.display="block";load();}
+async function load(){const {data,error}=await db.from("inspections").select("inspection_no,created_at,project,inspector,element,spacer,status,photo_drive_url").order("created_at",{ascending:false}).limit(500);if(error){alert(error.message);return;}$("count").textContent=`Total submissions: ${data.length}`;$("rows").innerHTML=data.map(x=>`<tr><td>${esc(x.inspection_no)}</td><td>${new Date(x.created_at).toLocaleString()}</td><td>${esc(x.project)}</td><td>${esc(x.inspector)}</td><td>${esc(x.element)}</td><td>${esc(x.spacer)}</td><td>${esc(x.status)}</td><td><a href="${esc(x.photo_drive_url)}" target="_blank">Open photo</a></td></tr>`).join("");}
+function esc(v){return String(v||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+$("refresh").onclick=load;$("logout").onclick=async()=>{await db.auth.signOut();location.reload();};db.auth.getSession().then(show);
+</script></body></html>
