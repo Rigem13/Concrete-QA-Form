@@ -1,0 +1,870 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QualityFirst Engineering - QA/QC Inspection</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    padding: 15px;
+    background: #e8edf3;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #172b46;
+}
+
+.sheet {
+    max-width: 1050px;
+    margin: auto;
+    background: white;
+    box-shadow: 0 3px 15px #0002;
+    overflow: hidden;
+}
+
+/* HEADER */
+.header {
+    display: grid;
+    grid-template-columns: 42% 58%;
+    min-height: 120px;
+    background: #07366e;
+    color: white;
+}
+
+.brand {
+    background: white;
+    color: #12477e;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.brand-logo {
+    font-size: 31px;
+    font-weight: 900;
+    font-style: italic;
+    line-height: 1;
+}
+
+.brand-logo span {
+    color: #1769b1;
+}
+
+.brand small {
+    display: block;
+    letter-spacing: 4px;
+    font-weight: bold;
+    margin-top: 7px;
+}
+
+.brand-icon {
+    font-size: 34px;
+}
+
+.header-title {
+    padding: 18px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-left: 10px solid #f4bd31;
+}
+
+.header-title h1 {
+    font-size: 23px;
+    margin: 0 0 8px;
+    font-weight: 900;
+}
+
+.header-title p {
+    font-style: italic;
+    margin: 0;
+    font-size: 14px;
+}
+
+/* MAIN TITLE */
+.main-title {
+    background: #104b91;
+    color: white;
+    text-align: center;
+    padding: 12px;
+    margin: 10px;
+    border-radius: 8px;
+    font-weight: 900;
+    font-size: 21px;
+}
+
+/* DESCRIPTION */
+.description {
+    margin: 10px;
+    background: #edf3fc;
+    padding: 13px;
+    display: grid;
+    grid-template-columns: 75% 25%;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+.description h4 {
+    margin: 0 0 5px;
+    color: #15477f;
+}
+
+.description p {
+    margin: 3px 0;
+}
+
+.batch-info {
+    border-left: 1px solid #9eafc3;
+    padding-left: 15px;
+    line-height: 1.8;
+}
+
+/* TWO COLUMN LAYOUT */
+.content {
+    display: grid;
+    grid-template-columns: 44% 56%;
+    gap: 15px;
+    padding: 10px;
+}
+
+.section {
+    margin-bottom: 12px;
+}
+
+.section-title {
+    background: #104b91;
+    color: white;
+    padding: 7px 10px;
+    border-radius: 5px;
+    font-size: 13px;
+    font-weight: 900;
+    margin-bottom: 9px;
+}
+
+.field {
+    margin: 10px 8px 13px;
+}
+
+.field label {
+    display: block;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.required {
+    color: #d62929;
+}
+
+input[type="text"], select, textarea {
+    width: 100%;
+    border: 1px solid #cbd3df;
+    border-radius: 5px;
+    padding: 9px;
+    font-size: 12px;
+    font-family: inherit;
+    background: #fff;
+}
+
+textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.choice {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    font-size: 11px;
+    margin: 8px;
+    line-height: 1.35;
+}
+
+.choice input {
+    margin-top: 1px;
+    accent-color: #176bb4;
+}
+
+.color-choice {
+    padding: 7px;
+    border-radius: 5px;
+    border: 1px solid #e1e5eb;
+    margin: 5px 8px;
+}
+
+.blue { border-left: 4px solid #2677e9; }
+.green { border-left: 4px solid #24a45a; }
+.red { border-left: 4px solid #e43d3d; }
+
+/* PHOTO */
+.photo-area {
+    margin: 10px 8px;
+}
+
+.upload-box {
+    border: 1px dashed #9cabbc;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    font-size: 12px;
+}
+
+.photo-frame {
+    position: relative;
+    background: #e6eaf0;
+    min-height: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 5px;
+}
+
+.photo-frame img#photoPreview {
+    width: 100%;
+    height: 290px;
+    object-fit: cover;
+    display: none;
+}
+
+.photo-placeholder {
+    padding: 30px;
+    text-align: center;
+    color: #65758b;
+    font-size: 13px;
+}
+
+.spacer-label {
+    position: absolute;
+    display: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 145px;
+    background: #fff;
+    border: 5px solid #e32636;
+    border-radius: 10px;
+    padding: 8px;
+    text-align: center;
+    box-shadow: 0 3px 10px #0005;
+}
+
+.spacer-label strong {
+    font-size: 16px;
+    color: #d92130;
+}
+
+.spacer-label small {
+    font-size: 9px;
+    font-weight: bold;
+}
+
+#photoQR {
+    display: flex;
+    justify-content: center;
+    margin: 5px;
+}
+
+#photoQR img {
+    width: 65px;
+    height: 65px;
+}
+
+.photo-success {
+    background: #e1f6df;
+    color: #237b36;
+    text-align: center;
+    font-size: 12px;
+    padding: 10px;
+    margin-top: 8px;
+    border-radius: 5px;
+    display: none;
+    font-weight: bold;
+}
+
+/* CERTIFICATE */
+.certificate {
+    display: none;
+    border: 5px double #164c91;
+    padding: 15px;
+    margin: 12px 5px;
+    text-align: center;
+    position: relative;
+    background: #fff;
+}
+
+.cert-brand {
+    font-size: 24px;
+    color: #154c88;
+    font-weight: 900;
+    font-style: italic;
+}
+
+.certificate h3 {
+    font-size: 15px;
+    margin: 12px 0;
+    color: #123b70;
+}
+
+.certificate p {
+    font-size: 11px;
+}
+
+.cert-details {
+    text-align: left;
+    font-size: 11px;
+    line-height: 1.8;
+    margin-top: 15px;
+}
+
+.cert-sign {
+    border-top: 1px solid #333;
+    width: 180px;
+    margin: 25px 0 0 auto;
+    padding-top: 5px;
+    font-size: 10px;
+}
+
+.cert-seal {
+    color: #bd8c15;
+    font-size: 35px;
+}
+
+/* BUTTONS */
+.actions {
+    padding: 15px;
+    text-align: center;
+}
+
+button {
+    background: #104b91;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 12px 20px;
+    margin: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background: #087b75;
+}
+
+.status-message {
+    display: none;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 5px;
+    background: #e0f6e5;
+    color: #176b36;
+    text-align: center;
+}
+
+/* FOOTER */
+.footer {
+    background: #07366e;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    border-left: 12px solid #f3b82f;
+    border-right: 12px solid #f3b82f;
+}
+
+.footer h2 {
+    margin: 0;
+    font-size: 20px;
+    font-style: italic;
+}
+
+.footer p {
+    margin: 5px;
+    font-style: italic;
+    font-size: 13px;
+}
+
+/* MOBILE */
+@media(max-width:700px) {
+    body { padding: 5px; }
+
+    .header {
+        grid-template-columns: 1fr;
+    }
+
+    .header-title {
+        border-left: none;
+        border-top: 7px solid #f4bd31;
+    }
+
+    .header-title h1 { font-size: 19px; }
+
+    .description {
+        grid-template-columns: 1fr;
+    }
+
+    .batch-info {
+        border-left: none;
+        border-top: 1px solid #9eafc3;
+        padding: 8px 0 0;
+        margin-top: 8px;
+    }
+
+    .content {
+        grid-template-columns: 1fr;
+    }
+
+    .main-title { font-size: 16px; }
+
+    .photo-frame img#photoPreview {
+        height: 250px;
+    }
+}
+
+/* PRINT */
+@media print {
+    @page {
+        size: A4 portrait;
+        margin: 7mm;
+    }
+
+    body {
+        padding: 0;
+        background: white;
+    }
+
+    .sheet {
+        max-width: none;
+        box-shadow: none;
+    }
+
+    .actions, .upload-box, .no-print {
+        display: none !important;
+    }
+
+    .content {
+        grid-template-columns: 44% 56%;
+        gap: 8px;
+    }
+
+    .section, .certificate, .photo-area {
+        break-inside: avoid;
+    }
+
+    input, select, textarea {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+
+    .header, .section-title, .main-title, .footer {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="sheet">
+
+<!-- HEADER -->
+<header class="header">
+    <div class="brand">
+        <div>
+            <div class="brand-logo">
+                🏗️ Quality<span>First</span>
+            </div>
+            <small>ENGINEERING</small>
+        </div>
+    </div>
+
+    <div class="header-title">
+        <h1>SMART CONCRETE COVER<br>SPACER BLOCKS</h1>
+        <p>"The Right Cover, The Right Protection,<br>
+        The Stronger Foundation!"</p>
+    </div>
+</header>
+
+<div class="main-title">
+    PRE-POUR STRUCTURAL QA/QC INSPECTION FORM
+</div>
+
+<!-- DESCRIPTION -->
+<div class="description">
+    <div>
+        <h4>Description:</h4>
+        <p><b>Welcome to the QualityFirst Engineering Digital Verification Portal!</b></p>
+        <p>
+        This form is designed to document the inspection of color-coded
+        concrete cover spacer blocks before concrete pouring. Our goal is
+        to help ensure proper concrete cover, correct spacer placement,
+        and better construction quality through digital verification.
+        </p>
+    </div>
+
+    <div class="batch-info">
+        <b>Batch ID:</b> QF-2026-040B<br>
+        <b>Inspection Type:</b><br>
+        Concrete Cover Verification
+    </div>
+</div>
+
+<form id="inspectionForm">
+
+<div class="content">
+
+<!-- LEFT COLUMN -->
+<div>
+
+<section class="section">
+    <div class="section-title">SECTION 1: PROJECT INFORMATION</div>
+
+    <div class="field">
+        <label>1. Project Name and Location <span class="required">*</span></label>
+        <input name="project" type="text"
+        placeholder="Enter project name and location" required>
+    </div>
+
+    <div class="field">
+        <label>2. Name of Inspector / Site Engineer <span class="required">*</span></label>
+        <input name="inspector" type="text"
+        placeholder="Enter inspector name" required>
+    </div>
+
+    <div class="field">
+        <label>3. Structural Element Inspected <span class="required">*</span></label>
+        <select name="element" required>
+            <option value="">Select element</option>
+            <option>Footing</option>
+            <option>Column</option>
+            <option>Beam</option>
+            <option>Suspended Slab</option>
+            <option>Retaining Wall</option>
+            <option>Wall</option>
+        </select>
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-title">SECTION 2: SPACER BLOCK VERIFICATION</div>
+
+    <div class="field">
+        <label>4. Spacer Color Code and Specified Cover <span class="required">*</span></label>
+
+        <label class="choice color-choice blue">
+            <input type="radio" name="spacer"
+            value="Blue - 20 mm" required>
+            🔵 Blue – 20 mm (Slabs / Interior Walls)
+        </label>
+
+        <label class="choice color-choice green">
+            <input type="radio" name="spacer"
+            value="Green - 40 mm">
+            🟢 Green – 40 mm (Beams / Columns)
+        </label>
+
+        <label class="choice color-choice red">
+            <input type="radio" name="spacer"
+            value="Red - 75 mm">
+            🔴 Red – 75 mm (Footings / Cast Against Earth)
+        </label>
+    </div>
+
+    <div class="field">
+        <label>5. Pre-Pour QA/QC Checklist Verification <span class="required">*</span></label>
+
+        <label class="choice">
+            <input type="checkbox" name="checklist">
+            Spacers are properly placed along the reinforcement bars.
+        </label>
+
+        <label class="choice">
+            <input type="checkbox" name="checklist">
+            Embedded GI tie wires are properly secured to the reinforcement.
+        </label>
+
+        <label class="choice">
+            <input type="checkbox" name="checklist">
+            Required concrete cover has been checked against project specifications.
+        </label>
+
+        <label class="choice">
+            <input type="checkbox" name="checklist">
+            Formwork and reinforcement are clean and free from debris.
+        </label>
+
+        <label class="choice">
+            <input type="checkbox" name="checklist">
+            Spacer blocks are properly positioned and stable.
+        </label>
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-title">SECTION 4: INSPECTION APPROVAL</div>
+
+    <div class="field">
+        <label>7. Inspection Status and Sign-Off <span class="required">*</span></label>
+
+        <label class="choice">
+            <input type="radio" name="status"
+            value="APPROVED FOR CONCRETE POURING" required>
+            🟢 APPROVED FOR CONCRETE POURING
+        </label>
+
+        <label class="choice">
+            <input type="radio" name="status"
+            value="HOLD - RE-ADJUSTMENT REQUIRED">
+            ⚪ HOLD – RE-ADJUSTMENT REQUIRED
+        </label>
+    </div>
+
+    <div class="field">
+        <label>8. Additional Comments / Recommendations</label>
+        <textarea name="comments"
+        placeholder="Enter comments and recommendations..."></textarea>
+    </div>
+</section>
+
+</div>
+
+<!-- RIGHT COLUMN -->
+<div>
+
+<section class="section">
+    <div class="section-title">SECTION 3: PHOTO DOCUMENTATION</div>
+
+    <div class="field">
+        <label>6. Upload Pre-Pour Photo Proof <span class="required">*</span></label>
+        <p style="font-size:11px">
+        Upload a photo showing the installed color-coded spacer block
+        attached to the reinforcement bars.
+        </p>
+    </div>
+
+    <div class="photo-area">
+        <div class="upload-box no-print">
+            <input type="file" id="photoInput" accept="image/*">
+        </div>
+
+        <div class="photo-frame">
+            <div class="photo-placeholder" id="placeholder">
+                📷<br><br>
+                UPLOAD PRE-POUR INSPECTION PHOTO<br>
+                <small>Reinforcement and concrete spacer block</small>
+            </div>
+
+            <img id="photoPreview" alt="Pre-pour inspection photo">
+
+            <div class="spacer-label" id="spacerLabel">
+                <small>🏗️ QualityFirst</small>
+                <div id="labelQR"></div>
+                <strong id="labelCover">75 mm</strong>
+                <small id="labelElement">FOOTINGS</small>
+                <hr>
+                <small>SCAN FOR QA/QC</small>
+            </div>
+        </div>
+
+        <div class="photo-success" id="photoSuccess">
+            ✓ Photo Uploaded Successfully!
+        </div>
+
+        <div class="field">
+            <label>Photo Log ID (Optional)</label>
+            <input type="text" name="photoLog"
+            placeholder="PHOTO-QF-040B-001">
+        </div>
+    </div>
+</section>
+
+<!-- CERTIFICATE -->
+<div class="certificate" id="certificate">
+    <div class="cert-seal">🏅</div>
+    <div class="cert-brand">🏗️ QualityFirst</div>
+    <div style="letter-spacing:3px;font-size:10px">
+        ENGINEERING
+    </div>
+
+    <h3>PRE-POUR QUALITY ASSURANCE CERTIFICATE</h3>
+
+    <p>
+    This certifies that the concrete cover spacer blocks have been
+    inspected and verified in accordance with the applicable
+    project specifications and approved construction requirements.
+    </p>
+
+    <div class="cert-details">
+        <b>Batch ID:</b> QF-2026-040B<br>
+        <b>Project:</b> <span id="certProject"></span><br>
+        <b>Inspector:</b> <span id="certInspector"></span><br>
+        <b>Structural Element:</b> <span id="certElement"></span><br>
+        <b>Spacer:</b> <span id="certSpacer"></span><br>
+        <b>Date:</b> <span id="certDate"></span><br>
+        <b>Status:</b> <span id="certStatus"></span>
+    </div>
+
+    <div class="cert-sign">
+        QA/QC Engineer
+    </div>
+
+    <p style="font-weight:bold;color:#154c88">
+        QUALITY FIRST, SAFETY ALWAYS!
+    </p>
+</div>
+
+</div>
+</div>
+
+<div class="actions no-print">
+    <button type="submit">SUBMIT INSPECTION</button>
+    <button type="button" onclick="printReport()">PRINT REPORT</button>
+</div>
+
+</form>
+
+<div class="status-message" id="successMessage">
+    <h3>✓ INSPECTION SUBMITTED SUCCESSFULLY!</h3>
+    <p>Your inspection record has been prepared for demonstration.</p>
+    <p><b>QUALITY FIRST, SAFETY ALWAYS!</b></p>
+</div>
+
+<footer class="footer">
+    <h2>QUALITY FIRST, SAFETY ALWAYS!</h2>
+    <p>"The Right Cover, The Right Protection, The Stronger Foundation!"</p>
+</footer>
+
+</div>
+
+<script>
+
+// CREATE QR CODE
+const qrURL = window.location.href;
+
+new QRCode(document.getElementById("labelQR"), {
+    text: qrURL,
+    width: 65,
+    height: 65,
+    correctLevel: QRCode.CorrectLevel.H
+});
+
+// PHOTO UPLOAD AND PREVIEW
+document.getElementById("photoInput").addEventListener("change", function() {
+    const file = this.files[0];
+
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+        alert("Please upload a valid image.");
+        this.value = "";
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+        document.getElementById("photoPreview").src = e.target.result;
+        document.getElementById("photoPreview").style.display = "block";
+        document.getElementById("placeholder").style.display = "none";
+        document.getElementById("photoSuccess").style.display = "block";
+        document.getElementById("spacerLabel").style.display = "block";
+    };
+
+    reader.readAsDataURL(file);
+});
+
+// UPDATE SPACER LABEL
+document.querySelectorAll('input[name="spacer"]').forEach(radio => {
+    radio.addEventListener("change", function() {
+        let cover = "75 mm";
+        let element = "FOOTINGS";
+
+        if (this.value.includes("20")) {
+            cover = "20 mm";
+            element = "SLABS";
+        } else if (this.value.includes("40")) {
+            cover = "40 mm";
+            element = "BEAMS / COLUMNS";
+        }
+
+        document.getElementById("labelCover").textContent = cover;
+        document.getElementById("labelElement").textContent = element;
+    });
+});
+
+// SUBMIT FORM
+document.getElementById("inspectionForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const checklist = document.querySelectorAll('input[name="checklist"]:checked');
+
+    if (checklist.length !== 5) {
+        alert("Please complete all five QA/QC checklist items.");
+        return;
+    }
+
+    if (!document.getElementById("photoInput").files.length) {
+        alert("Please upload the pre-pour inspection photo.");
+        return;
+    }
+
+    const data = new FormData(this);
+
+    const status = data.get("status");
+
+    document.getElementById("certProject").textContent = data.get("project");
+    document.getElementById("certInspector").textContent = data.get("inspector");
+    document.getElementById("certElement").textContent = data.get("element");
+    document.getElementById("certSpacer").textContent = data.get("spacer");
+    document.getElementById("certStatus").textContent = status;
+    document.getElementById("certDate").textContent = new Date().toLocaleDateString();
+
+    const certificate = document.getElementById("certificate");
+    certificate.style.display = "block";
+
+    const message = document.getElementById("successMessage");
+    message.style.display = "block";
+
+    if (status.includes("HOLD")) {
+        message.style.background = "#fff1dc";
+        message.style.color = "#8b5200";
+        message.querySelector("h3").textContent =
+            "⚠ INSPECTION ON HOLD – RE-ADJUSTMENT REQUIRED";
+    } else {
+        message.style.background = "#e0f6e5";
+        message.style.color = "#176b36";
+        message.querySelector("h3").textContent =
+            "✓ INSPECTION APPROVED FOR CONCRETE POURING";
+    }
+
+    // Demonstration record in browser console
+    const record = Object.fromEntries(data.entries());
+    record.checklistCompleted = checklist.length;
+    record.submissionDate = new Date().toISOString();
+
+    console.log("QUALITYFIRST INSPECTION RECORD:", record);
+
+    certificate.scrollIntoView({behavior:"smooth"});
+});
+
+// PRINT REPORT
+function printReport() {
+    if (document.getElementById("certificate").style.display !== "block") {
+        alert("Please submit the inspection form first.");
+        return;
+    }
+
+    window.print();
+}
+
+</script>
+
+</body>
+</html>
