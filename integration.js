@@ -1,7 +1,7 @@
 // Replace YOUR_PROJECT_REF with the Supabase project reference.
 // Add <input type="email" name="inspectorEmail" placeholder="Inspector email (optional)">.
 // Remove the previous form submit listener, then include this file before </body>.
-const QF_FUNCTION_URL="https://YOUR_PROJECT_REF.supabase.co/functions/v1/submit-inspection";
+const QF_FUNCTION_URL="https://uyhwijnqrnghdleyzmho.supabase.co/functions/v1/submit-inspection";
 const qfForm=document.getElementById("inspectionForm");
 function qfRead(file){return new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(r.result);r.onerror=no;r.readAsDataURL(file);});}
 async function qfPhoto(file){
