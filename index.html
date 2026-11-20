@@ -799,60 +799,6 @@ document.querySelectorAll('input[name="spacer"]').forEach(radio => {
     });
 });
 
-// SUBMIT FORM
-document.getElementById("inspectionForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-
-    const checklist = document.querySelectorAll('input[name="checklist"]:checked');
-
-    if (checklist.length !== 5) {
-        alert("Please complete all five QA/QC checklist items.");
-        return;
-    }
-
-    if (!document.getElementById("photoInput").files.length) {
-        alert("Please upload the pre-pour inspection photo.");
-        return;
-    }
-
-    const data = new FormData(this);
-
-    const status = data.get("status");
-
-    document.getElementById("certProject").textContent = data.get("project");
-    document.getElementById("certInspector").textContent = data.get("inspector");
-    document.getElementById("certElement").textContent = data.get("element");
-    document.getElementById("certSpacer").textContent = data.get("spacer");
-    document.getElementById("certStatus").textContent = status;
-    document.getElementById("certDate").textContent = new Date().toLocaleDateString();
-
-    const certificate = document.getElementById("certificate");
-    certificate.style.display = "block";
-
-    const message = document.getElementById("successMessage");
-    message.style.display = "block";
-
-    if (status.includes("HOLD")) {
-        message.style.background = "#fff1dc";
-        message.style.color = "#8b5200";
-        message.querySelector("h3").textContent =
-            "⚠ INSPECTION ON HOLD – RE-ADJUSTMENT REQUIRED";
-    } else {
-        message.style.background = "#e0f6e5";
-        message.style.color = "#176b36";
-        message.querySelector("h3").textContent =
-            "✓ INSPECTION APPROVED FOR CONCRETE POURING";
-    }
-
-    // Demonstration record in browser console
-    const record = Object.fromEntries(data.entries());
-    record.checklistCompleted = checklist.length;
-    record.submissionDate = new Date().toISOString();
-
-    console.log("QUALITYFIRST INSPECTION RECORD:", record);
-
-    certificate.scrollIntoView({behavior:"smooth"});
-});
 
 // PRINT REPORT
 function printReport() {
